@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Skeleton;
+namespace dpinheiro\Eupago;
 
 use Payum\Skeleton\Action\AuthorizeAction;
 use Payum\Skeleton\Action\CancelAction;
@@ -11,7 +11,7 @@ use Payum\Skeleton\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
-class SkeletonGatewayFactory extends GatewayFactory
+class EupagoGatewayFactory extends GatewayFactory
 {
     /**
      * {@inheritDoc}

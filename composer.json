@@ -1,22 +1,14 @@
 {
-    "name": "payum/skeleton",
+    "name": "dpinheiro/eupago",
     "type": "project",
-    "description": "The Payum extension. Rapid extensino development",
-    "keywords": ["payment"],
-    "homepage": "http://payum.org",
+    "description": "Payum eupago extension",
+    "keywords": ["payment", "payum", "eupago"],
+    "homepage": "http://pixelplan.net",
     "license": "MIT",
     "authors": [
         {
-            "name": "Kotlyar Maksim",
-            "email": "kotlyar.maksim@gmail.com"
-        },
-        {
-            "name":     "Payum project",
-            "homepage": "http://payum.org/"
-        },
-        {
-            "name":     "Community contributions",
-            "homepage": "https://github.com/Payum/AuthorizeNetAim/contributors"
+            "name": "Diogo Pinheiro",
+            "email": "diogormpinheiro@gmail.com"
         }
     ],
     "require": {
@@ -30,9 +22,9 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\Skeleton": "" }
+        "psr-0": { "dpinheiro\\Eupago": "" }
     },
-    "target-dir": "Payum/Skeleton",
+    "target-dir": "dpinheiro/Eupago",
     "extra": {
         "branch-alias": {
             "dev-master": "1.3-dev"

@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Skeleton\Action;
+namespace dpinheiro\Eupago\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
