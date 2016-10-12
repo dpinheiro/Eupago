@@ -2,6 +2,7 @@
 namespace dpinheiro\Eupago;
 
 use Http\Message\MessageFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\HttpClientInterface;
 
@@ -20,7 +21,10 @@ class Api
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = array(
+        'key' => null,
+        'sandbox' => null
+    );
 
     /**
      * @param array               $options
@@ -31,9 +35,24 @@ class Api
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+        $options->validateNotEmpty(array(
+            'key'
+        ));
+
+        if (false == is_bool($options['sandbox'])) {
+            throw new LogicException('The boolean sandbox option must be set.');
+        }
+
         $this->options = $options;
         $this->client = $client;
         $this->messageFactory = $messageFactory;
+    }
+
+    public function generateMb(array $params)
+    {
+        return $this->doRequest($params);
     }
 
     /**
@@ -41,19 +60,35 @@ class Api
      *
      * @return array
      */
-    protected function doRequest($method, array $fields)
+    protected function doRequest(array $fields)
     {
-        $headers = [];
+        $data = array(
+            "chave" => $this->options['key'],
+            "valor" => $fields['value'],
+            "id" => $fields['id']
+        );
 
-        $request = $this->messageFactory->createRequest($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $context = stream_context_create([
+            'ssl' => [
+                // set some SSL/TLS specific options
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ]);
 
-        $response = $this->client->send($request);
-
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
-            throw HttpException::factory($request, $response);
+        try {
+            $client = new \SoapClient($this->getApiEndpoint(), [
+                'stream_context' => $context,
+                'cache_wsdl'     => WSDL_CACHE_NONE
+            ]);
+            $result = $client->gerarReferenciaMB($data);
+        } catch (\SoapFault $sf) {
+            die('teste');
+            //throw new \Exception($sf->getMessage(), $sf->getCode());
         }
 
-        return $response;
+        return $result;
     }
 
     /**
@@ -61,6 +96,6 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        return $this->options['sandbox'] ? 'http://sandbox.example.com' : 'http://example.com';
+        return $this->options['sandbox'] ? 'http://replica.eupago.pt/replica.eupagov3.wsdl' : 'https://seguro.eupago.pt/replica.eupagov3.wsdl';
     }
 }

@@ -1,15 +1,38 @@
 <?php
 namespace dpinheiro\Eupago\Action;
 
+use dpinheiro\Eupago\Api;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Model\Identity;
+use Payum\Core\Model\Payment;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetHttpRequest;
 
-class CaptureAction implements ActionInterface
+class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 {
     use GatewayAwareTrait;
+
+    /**
+     * @var Api
+     */
+    protected $api;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setApi($api)
+    {
+        if (false == $api instanceof Api) {
+            throw new UnsupportedApiException('Not supported.');
+        }
+        $this->api = $api;
+    }
 
     /**
      * {@inheritDoc}
@@ -22,7 +45,17 @@ class CaptureAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        //$httpRequest = new GetHttpRequest();
+        //$this->gateway->execute($httpRequest);
+
+        $data = array(
+            'value' => $model['AMOUNT'],
+            'id'    => $model['ORDER_ID']
+        );
+
+        $result = $this->api->generateMb($data);
+
+        $model->replace((array) $result);
     }
 
     /**

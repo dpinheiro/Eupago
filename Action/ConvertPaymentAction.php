@@ -23,7 +23,12 @@ class ConvertPaymentAction implements ActionInterface
         /** @var PaymentInterface $payment */
         $payment = $request->getSource();
 
-        throw new \LogicException('Not implemented');
+        //$details = ArrayObject::ensureArrayObject($payment->getDetails());
+        $details = $payment->getDetails();
+        $details['AMOUNT'] = $payment->getTotalAmount();
+        $details['CLIENT_ID'] = $payment->getClientId();
+        $details['ORDER_ID'] = $payment->getNumber();
+        $request->setResult((array) $details);
     }
 
     /**

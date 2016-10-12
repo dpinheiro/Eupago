@@ -19,7 +19,22 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        if (!isset($model['estado'])) {
+            $request->markNew();
+            return;
+        }
+
+        $status = $model['estado'];
+
+        // api success
+        if($status == 0)
+        {
+            $request->markPending();
+            return;
+        }
+
+        $request->markFailed();
+        return;
     }
 
     /**
