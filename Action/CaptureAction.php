@@ -53,6 +53,10 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
             'id'    => $model['ORDER_ID']
         );
 
+        if (array_key_exists('DATE_LIMIT', $model)) {
+            $data['dateLimit'] = $model['DATE_LIMIT'];
+        }
+
         $result = $this->api->generateMb($data);
 
         $model->replace((array) $result);

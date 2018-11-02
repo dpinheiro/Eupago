@@ -68,6 +68,10 @@ class Api
             "id" => $fields['id']
         );
 
+        if (array_key_exists('dateLimit', $fields)) {
+            $data['data_fim'] = $fields['dateLimit'];
+        }
+
         $context = stream_context_create([
             'ssl' => [
                 // set some SSL/TLS specific options
