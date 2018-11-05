@@ -86,7 +86,13 @@ class Api
                 'stream_context' => $context,
                 'cache_wsdl'     => WSDL_CACHE_NONE
             ]);
-            $result = $client->gerarReferenciaMB($data);
+            
+            if (array_key_exists('data_fim', $data)) {
+                $result = $client->gerarReferenciaMBDL($data);
+            } else {
+                $result = $client->gerarReferenciaMB($data);
+            }
+
         } catch (\SoapFault $sf) {
             die('teste');
             //throw new \Exception($sf->getMessage(), $sf->getCode());
