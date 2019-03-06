@@ -49,7 +49,7 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
         //$this->gateway->execute($httpRequest);
 
         $data = array(
-            'value' => $model['AMOUNT'],
+            'value' => $model['AMOUNT'] / 100,
             'id'    => $model['ORDER_ID']
         );
 
