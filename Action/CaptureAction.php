@@ -59,6 +59,10 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 
         $result = $this->api->generateMb($data);
 
+        $result->valor = $result->valor * 100;
+        $result->valor_minimo = $result->valor_minimo * 100;
+        $result->valor_maximo = $result->valor_maximo * 100;
+
         $model->replace((array) $result);
     }
 
