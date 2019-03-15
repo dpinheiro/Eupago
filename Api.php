@@ -94,8 +94,7 @@ class Api
             }
 
         } catch (\SoapFault $sf) {
-            die('teste');
-            //throw new \Exception($sf->getMessage(), $sf->getCode());
+            throw new \Exception($sf->getMessage(), $sf->getCode());
         }
 
         return $result;
@@ -106,6 +105,6 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        return $this->options['sandbox'] ? 'http://replica.eupago.pt/replica.eupagov3.wsdl' : 'https://seguro.eupago.pt/replica.eupagov3.wsdl';
+        return $this->options['sandbox'] ? 'http://replica.eupago.pt/replica.eupagov3.wsdl' : 'https://seguro.eupago.pt/eupagov3.wsdl';
     }
 }
